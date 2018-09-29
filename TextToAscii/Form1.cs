@@ -13,7 +13,7 @@ namespace TextToAscii
 
         private void btnSend_Click(object sender, EventArgs e)
         {
-            int buadrate = Convert.ToInt32(txtBaudRate.Text);
+            int baudrate = Convert.ToInt32(txtBaudRate.Text);
 
             try
             {
