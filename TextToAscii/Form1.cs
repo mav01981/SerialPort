@@ -18,7 +18,7 @@ namespace TextToAscii
             try
             {
                 using (SerialPort _serialPort
-                    = new SerialPort(cbxPorts.SelectedItem.ToString(), buadrate, Parity.None, 8, StopBits.One))
+                    = new SerialPort(cbxPorts.SelectedItem.ToString(), baudrate, Parity.None, 8, StopBits.One))
                 {
                     // Set the read/write timeouts
                     _serialPort.ReadTimeout = 500;
