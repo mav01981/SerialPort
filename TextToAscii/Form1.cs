@@ -14,11 +14,15 @@ namespace TextToAscii
         private void btnSend_Click(object sender, EventArgs e)
         {
             int baudrate = Convert.ToInt32(txtBaudRate.Text);
+            int databits = Convert.ToInt32(cbDatabits.SelectedItem);
+            Parity parity = (Parity)cbParity.SelectedItem;
+            StopBits stopBits = (StopBits)cbStopBits.SelectedItem;
+            Handshake handshake = (Handshake)cbHandshake.SelectedItem;
 
             try
             {
                 using (SerialPort _serialPort
-                    = new SerialPort(cbxPorts.SelectedItem.ToString(), baudrate, Parity.None, 8, StopBits.One))
+                    = new SerialPort(tbPortName.Text, baudrate, parity, databits, stopBits))
                 {
                     // Set the read/write timeouts
                     _serialPort.ReadTimeout = 500;
@@ -26,7 +30,9 @@ namespace TextToAscii
 
                     _serialPort.Open();
 
-                    _serialPort.WriteLine(txtText.Text.ConvertToASCII());
+                    _serialPort.Handshake = handshake;
+
+                    _serialPort.Write(txtText.Text.ConvertToASCII());
 
                     _serialPort.Close();
 
@@ -41,10 +47,9 @@ namespace TextToAscii
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            foreach (string s in SerialPort.GetPortNames())
-            {
-                cbxPorts.Items.Add(s);
-            }
+            cbParity.DataSource = Enum.GetValues(typeof(Parity));
+            cbStopBits.DataSource = Enum.GetValues(typeof(StopBits));
+            cbHandshake.DataSource = Enum.GetValues(typeof(Handshake));
         }
 
         private void txtBaudRate_TextChanged(object sender, EventArgs e)
