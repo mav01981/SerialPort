@@ -83,7 +83,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "FrmSave";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Please enter setting Name";
+            this.Text = "Please enter Setting Name";
             this.ResumeLayout(false);
             this.PerformLayout();
 
