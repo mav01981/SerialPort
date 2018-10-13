@@ -106,36 +106,39 @@ namespace TextToAscii
             FrmSave frm = new FrmSave();
             frm.ShowDialog();
 
-            var model = new SettingsModel()
+            if (frm.Save)
             {
-                Name = frm.Name.ToString(),
-                ComPortName = txtPortName.Text,
-                BuadRate = txtBaudRate.Text,
-                Databits = cbDatabits.SelectedItem.ToString(),
-                Stopbit = cbStopBits.SelectedItem.ToString(),
-                Parity = cbParity.SelectedItem.ToString(),
-                Handshake = cbHandshake.SelectedItem.ToString()
-            };
+                var model = new SettingsModel()
+                {
+                    Name = frm.Name.ToString(),
+                    ComPortName = txtPortName.Text,
+                    BuadRate = txtBaudRate.Text,
+                    Databits = cbDatabits.SelectedItem.ToString(),
+                    Stopbit = cbStopBits.SelectedItem.ToString(),
+                    Parity = cbParity.SelectedItem.ToString(),
+                    Handshake = cbHandshake.SelectedItem.ToString()
+                };
 
-            if (!File.Exists($"{AppDomain.CurrentDomain.BaseDirectory}settings.xml"))
-            {
-                List<SettingsModel> settings = new List<SettingsModel>();
-                settings.Add(model);
+                if (!File.Exists($"{AppDomain.CurrentDomain.BaseDirectory}settings.xml"))
+                {
+                    List<SettingsModel> settings = new List<SettingsModel>();
+                    settings.Add(model);
 
-                using (File.Create($"{AppDomain.CurrentDomain.BaseDirectory}settings.xml")) { }
+                    using (File.Create($"{AppDomain.CurrentDomain.BaseDirectory}settings.xml")) { }
 
-                XmlFunction.SerializeObject(settings, $"{AppDomain.CurrentDomain.BaseDirectory}settings.xml");
+                    XmlFunction.SerializeObject(settings, $"{AppDomain.CurrentDomain.BaseDirectory}settings.xml");
+                }
+                else
+                {
+                    var settings = XmlFunction.DeSerializeObject<List<SettingsModel>>($"{AppDomain.CurrentDomain.BaseDirectory}settings.xml");
+
+                    settings.Add(model);
+
+                    XmlFunction.SerializeObject(settings, $"{AppDomain.CurrentDomain.BaseDirectory}settings.xml");
+                }
+
+                LoadSettings();
             }
-            else
-            {
-                var settings = XmlFunction.DeSerializeObject<List<SettingsModel>>($"{AppDomain.CurrentDomain.BaseDirectory}settings.xml");
-
-                settings.Add(model);
-
-                XmlFunction.SerializeObject(settings, $"{AppDomain.CurrentDomain.BaseDirectory}settings.xml");
-            }
-
-            LoadSettings();
         }
     }
 }

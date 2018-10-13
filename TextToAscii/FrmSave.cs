@@ -13,6 +13,7 @@ namespace TextToAscii
     public partial class FrmSave : Form
     {
         private string name;
+
         public string Name
         {
             get
@@ -25,6 +26,8 @@ namespace TextToAscii
             }
         }
 
+        public bool Save { get; set; }
+
         public FrmSave()
         {
             InitializeComponent();
@@ -33,7 +36,12 @@ namespace TextToAscii
         private void button1_Click(object sender, EventArgs e)
         {
             name = txtbxName.Text;
+            this.Save = true;
+            this.Close();
+        }
 
+        private void btnClose_Click(object sender, EventArgs e)
+        {
             this.Close();
         }
     }
