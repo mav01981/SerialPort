@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.IO.Ports;
+using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace TextToAscii
@@ -9,6 +13,38 @@ namespace TextToAscii
         public Form1()
         {
             InitializeComponent();
+
+            LoadSettings();
+        }
+
+        void LoadSettings()
+        {
+            if (File.Exists($"{AppDomain.CurrentDomain.BaseDirectory}settings.xml"))
+            {
+                var settings = XmlFunction.DeSerializeObject<List<SettingsModel>>($"{AppDomain.CurrentDomain.BaseDirectory}settings.xml");
+
+                loadSettingsToolStripMenuItem.DropDownItems.Clear();
+
+                foreach (var setting in settings)
+                {
+                    ToolStripItem subItem = new ToolStripMenuItem(setting.Name);
+                    subItem.Click += menuClick;
+                    loadSettingsToolStripMenuItem.DropDownItems.Add(subItem);
+                }
+            }
+        }
+
+        private void menuClick(object sender, EventArgs e)
+        {
+            var settings = XmlFunction.DeSerializeObject<List<SettingsModel>>($"{AppDomain.CurrentDomain.BaseDirectory}settings.xml");
+            var setting = settings.Where(x => x.Name == ((ToolStripMenuItem)sender).Text).First();
+
+            txtPortName.Text = setting.ComPortName;
+            txtBaudRate.Text = setting.BuadRate;
+            cbDatabits.SelectedItem = setting.Databits;
+            cbStopBits.SelectedItem = setting.Stopbit;
+            cbParity.SelectedItem = setting.Parity;
+            cbHandshake.SelectedItem = (Handshake)Enum.Parse(typeof(Handshake), setting.Handshake);
         }
 
         private void btnSend_Click(object sender, EventArgs e)
@@ -22,17 +58,22 @@ namespace TextToAscii
             try
             {
                 using (SerialPort _serialPort
-                    = new SerialPort(tbPortName.Text, baudrate, parity, databits, stopBits))
+                    = new SerialPort(txtPortName.Text, baudrate, parity, databits, stopBits))
                 {
                     // Set the read/write timeouts
-                    _serialPort.ReadTimeout = 500;
-                    _serialPort.WriteTimeout = 500;
+                    _serialPort.ReadTimeout = 2000;
+                    _serialPort.WriteTimeout = 2000;
 
                     _serialPort.Open();
 
                     _serialPort.Handshake = handshake;
 
-                    _serialPort.Write(txtText.Text.ConvertToASCII());
+                    foreach (char @char in txtText.Text.ToCharArray())
+                    {
+                        _serialPort.Write(@char.ToString());
+
+                        Thread.Sleep(1000);
+                    }
 
                     _serialPort.Close();
 
@@ -58,6 +99,43 @@ namespace TextToAscii
             {
                 txtBaudRate.Text = string.Empty;
             }
+        }
+
+        private void saveSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmSave frm = new FrmSave();
+            frm.ShowDialog();
+
+            var model = new SettingsModel()
+            {
+                Name = frm.Name.ToString(),
+                ComPortName = txtPortName.Text,
+                BuadRate = txtBaudRate.Text,
+                Databits = cbDatabits.SelectedItem.ToString(),
+                Stopbit = cbStopBits.SelectedItem.ToString(),
+                Parity = cbParity.SelectedItem.ToString(),
+                Handshake = cbHandshake.SelectedItem.ToString()
+            };
+
+            if (!File.Exists($"{AppDomain.CurrentDomain.BaseDirectory}settings.xml"))
+            {
+                List<SettingsModel> settings = new List<SettingsModel>();
+                settings.Add(model);
+
+                using (File.Create($"{AppDomain.CurrentDomain.BaseDirectory}settings.xml")) { }
+
+                XmlFunction.SerializeObject(settings, $"{AppDomain.CurrentDomain.BaseDirectory}settings.xml");
+            }
+            else
+            {
+                var settings = XmlFunction.DeSerializeObject<List<SettingsModel>>($"{AppDomain.CurrentDomain.BaseDirectory}settings.xml");
+
+                settings.Add(model);
+
+                XmlFunction.SerializeObject(settings, $"{AppDomain.CurrentDomain.BaseDirectory}settings.xml");
+            }
+
+            LoadSettings();
         }
     }
 }

@@ -38,26 +38,31 @@
             this.label3 = new System.Windows.Forms.Label();
             this.cbStopBits = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.tbPortName = new System.Windows.Forms.TextBox();
+            this.txtPortName = new System.Windows.Forms.TextBox();
             this.cbHandshake = new System.Windows.Forms.ComboBox();
             this.v = new System.Windows.Forms.Label();
             this.cbDatabits = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // txtText
             // 
-            this.txtText.Location = new System.Drawing.Point(9, 10);
-            this.txtText.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtText.Location = new System.Drawing.Point(9, 35);
+            this.txtText.Margin = new System.Windows.Forms.Padding(2);
             this.txtText.Multiline = true;
             this.txtText.Name = "txtText";
-            this.txtText.Size = new System.Drawing.Size(736, 186);
+            this.txtText.Size = new System.Drawing.Size(736, 161);
             this.txtText.TabIndex = 0;
             // 
             // btnSend
             // 
             this.btnSend.Location = new System.Drawing.Point(9, 206);
-            this.btnSend.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnSend.Margin = new System.Windows.Forms.Padding(2);
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(56, 31);
             this.btnSend.TabIndex = 1;
@@ -78,7 +83,7 @@
             // txtBaudRate
             // 
             this.txtBaudRate.Location = new System.Drawing.Point(91, 213);
-            this.txtBaudRate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtBaudRate.Margin = new System.Windows.Forms.Padding(2);
             this.txtBaudRate.Name = "txtBaudRate";
             this.txtBaudRate.Size = new System.Drawing.Size(76, 20);
             this.txtBaudRate.TabIndex = 4;
@@ -141,12 +146,12 @@
             this.label4.TabIndex = 11;
             this.label4.Text = "StopBits";
             // 
-            // tbPortName
+            // txtPortName
             // 
-            this.tbPortName.Location = new System.Drawing.Point(172, 213);
-            this.tbPortName.Name = "tbPortName";
-            this.tbPortName.Size = new System.Drawing.Size(100, 20);
-            this.tbPortName.TabIndex = 12;
+            this.txtPortName.Location = new System.Drawing.Point(172, 213);
+            this.txtPortName.Name = "txtPortName";
+            this.txtPortName.Size = new System.Drawing.Size(100, 20);
+            this.txtPortName.TabIndex = 12;
             // 
             // cbHandshake
             // 
@@ -190,6 +195,38 @@
             this.label5.TabIndex = 16;
             this.label5.Text = "Data Bits";
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(756, 24);
+            this.menuStrip1.TabIndex = 17;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.loadSettingsToolStripMenuItem,
+            this.saveSettingsToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Text = "File";
+            // 
+            // saveSettingsToolStripMenuItem
+            // 
+            this.saveSettingsToolStripMenuItem.Name = "saveSettingsToolStripMenuItem";
+            this.saveSettingsToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.saveSettingsToolStripMenuItem.Text = "Save Current Settings";
+            this.saveSettingsToolStripMenuItem.Click += new System.EventHandler(this.saveSettingsToolStripMenuItem_Click);
+            // 
+            // loadSettingsToolStripMenuItem
+            // 
+            this.loadSettingsToolStripMenuItem.Name = "loadSettingsToolStripMenuItem";
+            this.loadSettingsToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.loadSettingsToolStripMenuItem.Text = "Load Settings";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -199,7 +236,7 @@
             this.Controls.Add(this.cbDatabits);
             this.Controls.Add(this.v);
             this.Controls.Add(this.cbHandshake);
-            this.Controls.Add(this.tbPortName);
+            this.Controls.Add(this.txtPortName);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.cbStopBits);
             this.Controls.Add(this.label3);
@@ -210,10 +247,14 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnSend);
             this.Controls.Add(this.txtText);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Controls.Add(this.menuStrip1);
+            this.MainMenuStrip = this.menuStrip1;
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.Text = "TextToAsci";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -231,11 +272,15 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox cbStopBits;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox tbPortName;
+        private System.Windows.Forms.TextBox txtPortName;
         private System.Windows.Forms.ComboBox cbHandshake;
         private System.Windows.Forms.Label v;
         private System.Windows.Forms.ComboBox cbDatabits;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveSettingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadSettingsToolStripMenuItem;
     }
 }
 
